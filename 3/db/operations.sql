@@ -45,3 +45,13 @@ WHERE articleid = (SELECT articleid2 FROM article_links_articles WHERE articleid
 SELECT article.title FROM article 
 INNER JOIN category ON article.categoryid = category.categoryid
 WHERE category.categoryid = 1;
+
+-- Word distribution
+SELECT articleid, 'class',
+    ROUND (   
+        (
+            LENGTH(articletext)
+            - LENGTH(REPLACE(articletext, "class", "")) 
+        ) / LENGTH("class")
+    ) AS count
+FROM article;
