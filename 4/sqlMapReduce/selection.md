@@ -7,13 +7,13 @@ SELECT fieldA FROM "input.csv" WHERE fieldB == something
 As MapReduce we could approach this by implementing the following `map` function:
 ```java
 public static class Map extends Mapper<LongWritable, Text, Text, Text> {
-    public void map(LongWritable key, Text value, Context context) IOException, InterruptedException {
+    public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
         String fields = value.ToString().split(",");
 
         String fieldB = "something";
 
         if (fields[1].Equals(fieldB)) { // Where fieldB
-            context.write(/*TODO: key*/, fields[0]) // Select fieldA
+            context.write(key, fields[0]); // Select fieldA
         }
     }
 }
@@ -26,9 +26,9 @@ public static class Reduce extends Reducer<Text, Text, Text, Text> {
         String fieldA;
 
         while (values.hasNext()) {
-            // TODO: connect to the map function and use fieldA
+            fieldA = values.next().get();
+            context.write(key, fieldA);
         }
-        context.write(key, fieldA)
     }   
 }
 ```
