@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+"""reduce.py"""
+
 import sys
 
 # Mapping

@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+"""map.py"""
+
 import sys
 from nltk.stem.snowball import SnowballStemmer
 from nltk.stem import WordNetLemmatizer
