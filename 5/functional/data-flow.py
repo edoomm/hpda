@@ -25,14 +25,39 @@ class DataFlow:
     def filter(self, function):
         """Keep the list of tuples for which function(t) returns true.
         """
+        filter_tuple = [] # final tuple
+
+        for e in self.tuple:
+            res = function(e)
+
+            if res:
+                filter_tuple.append(e)
+        
+        return DataFlow(filter_tuple)
 
     def map(self, function):
         """Transform one tuple for each input tuple.
         """
+        map_tuple = []
+
+        for e in self.tuple:
+            res = function(e)
+
+            map_tuple.append(res)
+        
+        return map_tuple
 
     def flatmap(self, function):
         """Transform each input tuple into a list with arbitrary number of tuples.
         """
+        flatmap_tuple = []
+
+        for e1 in self.tuple:
+            for e2 in e1:
+                res = function(e2)
+                flatmap_tuple.append(res)
+        
+        return flatmap_tuple
 
     def group(self, function):
         """Group together all tuples with the same string (returned by function). 
@@ -65,11 +90,26 @@ class DataFlow:
         elements as a single argument.
         """
 
-    def flatmap(self, function):
+    def join(self, y, function):
         """Join any tuple in itself with any tuple from y by calling function (tx,ty) on 
         each pair of tuples.
         """
+        join_tuple = []
+
+        for e in self.tuple:
+            res = function(e, y)
+
+            join_tuple.append([res, e])
+        
+        return join_tuple
+
 
 d = DataFlow([["name1", "1", "2"], ["name2", "3", "4"], ["name1", "5", "6"]])
-r = d.group(lambda x: x[0])
+# r = d.group(lambda x: x[0])
+# r = d.filter(lambda x: x[0] == "name1")
+# r = d.map(lambda x: x[0]+"m")
+# r = d.flatmap(lambda x: x+"m")
+# r = d.join(",", lambda x[0], y: x+y)
+fn = lambda x, y: x[0] + y
+r = d.join(",", fn)
 print(r)
