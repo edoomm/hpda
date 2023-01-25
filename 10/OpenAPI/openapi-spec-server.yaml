@@ -1,0 +1,457 @@
+openapi: 3.0.3
+info:
+  title: Swagger Hardware of servers - OpenAPI 3.0
+  description: |-
+    With OpenAPI it is possible to define an API via a specification and to generate documentation, 
+    server stubs and client code from it. For this exercise you should use OpenAPI 3.X to define an API 
+    for a service that collects data about the hardware of servers. Define a list of hardware attributes 
+    for a sever, such as CPU model, CPU cores, RAM capacity and so on. Also include an ID field. It should 
+    be possible to GET a list of all entries, GET a specific entry, to add an entry via POST, update an 
+    entry via PUT and remove an entry via DELETE. Define the path as you see fit, for example, using the 
+    id in the path for GET on a specific entry.
+  contact:
+    email: e.mendozamartinez@stud.uni-goettingen.de
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0
+tags:
+  - name: server
+    description: Main object that will contain hardware attributes
+  - name: cpu
+    description: CPU object that is part of the server hardware attributes
+  - name: ram
+    description: RAM object that is part of the server hardware attributes
+paths:
+  # All entries
+  /server/findAll:
+    get:
+      tags:
+        - server
+      summary: Finds all servers
+      description: Returns all servers
+      operationId: findAllServers
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Server'          
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Server'
+  /cpu/findAll:
+    get:
+      tags:
+        - cpu
+      summary: Finds all CPUs
+      description: Returns all CPUs
+      operationId: findAllCPUs
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CPU'          
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CPU'
+  /ram/findAll:
+    get:
+      tags:
+        - ram
+      summary: Finds all RAMs
+      description: Returns all RAMs
+      operationId: findAllRAMs
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RAM'          
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RAM'
+  # GET specific entries
+  /server:
+    put:
+      tags:
+        - server
+      summary: Update an existing server by Id
+      description: Update an existing server by Id
+      operationId: updateServer
+      requestBody:
+        description: Update an existent server in the data collection
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Server'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Server'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Server'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Server'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Server'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Server not found
+        '405':
+          description: Validation exception
+    post:
+      tags:
+        - server
+      summary: Add a new server by Id
+      description: Add a new server by Id
+      operationId: addServer
+      requestBody:
+        description: Create a new server in the data collection
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Server'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Server'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Server'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Server'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Server'
+        '405':
+          description: Validation exception
+  /server/{serverId}:
+    get:
+      tags:
+        - server
+      summary: Find server by ID
+      description: Returns a single server
+      operationId: getServerById
+      parameters:
+        - name: serverId
+          in: path
+          description: ID of server to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Server'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Server'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Server not found
+    put:
+      tags:
+        - server
+      summary: Update server
+      description: Updates a server with a given Id.
+      operationId: updateServer
+      parameters:
+        - name: serverId
+          in: path
+          description: ID of server that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update an existent server in the collection data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Server'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Server'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Server'
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+        - server
+      summary: Deletes a server
+      description: Delete a server
+      operationId: deleteServer
+      parameters:
+        - name: api_key
+          in: header
+          description: ''
+          required: false
+          schema:
+            type: string
+        - name: serverId
+          in: path
+          description: Server id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid server value
+  /cpu:
+    put:
+      tags:
+        - cpu
+      summary: Update an existing CPU by Id
+      description: Update an existing CPU by Id
+      operationId: updateCPU
+      requestBody:
+        description: Update an existent CPU in the data collection
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CPU'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CPU'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CPU'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CPU'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CPU'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: CPU not found
+        '405':
+          description: Validation exception
+    post:
+      tags:
+        - cpu
+      summary: Add a new CPU by Id
+      description: Add a new CPU by Id
+      operationId: addCPU
+      requestBody:
+        description: Create a new CPU in the data collection
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CPU'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CPU'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CPU'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CPU'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CPU'
+        '405':
+          description: Validation exception
+  /cpu/{cpuId}:
+    get:
+      tags:
+        - cpu
+      summary: Find CPU by ID
+      description: Returns a single CPU
+      operationId: getCPUById
+      parameters:
+        - name: cpuId
+          in: path
+          description: ID of CPU to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CPU'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CPU'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: CPU not found
+    put:
+      tags:
+        - cpu
+      summary: Update CPU
+      description: Updates a CPU with a given Id.
+      operationId: updateCPU
+      parameters:
+        - name: cpuId
+          in: path
+          description: ID of CPU that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update an existent CPU in the collection data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CPU'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CPU'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CPU'
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+        - cpu
+      summary: Deletes a CPU
+      description: Delete a CPU
+      operationId: deleteCPU
+      parameters:
+        - name: api_key
+          in: header
+          description: ''
+          required: false
+          schema:
+            type: string
+        - name: cpuId
+          in: path
+          description: CPU id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid CPU value
+  /ram:
+    put:
+      tags:
+        - ram
+      summary: Update an existing RAM by Id
+      description: Update an existing RAM by Id
+      operationId: updateRAM
+      requestBody:
+        description: Update an existent RAM in the data collection
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RAM'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/RAM'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RAM'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RAM'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/RAM'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: RAM not found
+        '405':
+          description: Validation exception
+    post:
+      tags:
+        - ram
+      summary: Add a new RAM by Id
+      description: Add a new RAM by Id
+      operationId: addRAM
+      requestBody:
+        description: Create a new RAM in the data collection
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RAM'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/RAM'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RAM'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RAM'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/RAM'
+        '405':
+          description: Validation exception
+  
+  # add entries via POST
+  # update entries via PUT
+  # remove entries via DELETE
